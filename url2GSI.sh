@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Project OEM-GSI Porter by Erfan Abdi <erfangplus@gmail.com>
-
 PROJECT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 TOOLS_DIR="$PROJECT_DIR/tools"
 PARTITIONS="system vendor cust odm oem factory product xrom systemex system_ext reserve india"
@@ -13,7 +11,7 @@ CLEAN=false
 
 usage()
 {
-    echo "Usage: [--help|-h|-?] [--ab|-b] [--aonly|-a] [--mounted|-m] [--cleanup|-c] $0 <Firmware link> <Firmware type> [Other args]"
+    echo "Usage: [--help|-h|-?] [--ab|-b] [--aonly|-a] [--cleanup|-c] $0 <Firmware link> <Firmware type> [Other args]"
     echo -e "\tFirmware link: Firmware download link or local path"
     echo -e "\tFirmware type: Firmware mode"
     echo -e "\t--ab: Build only AB"
@@ -68,7 +66,7 @@ shift
 ORIGINAL_URL=$URL
 
 if [[ $SRCTYPE == *":"* ]]; then
-    SRCTYPENAME=`echo "$SRCTYPE" | cut -d ":" -f 2`
+    SRCTYPENAME=$(echo "$SRCTYPE" | cut -d ":" -f 2)
 else
     SRCTYPENAME=$SRCTYPE
 fi
@@ -87,11 +85,7 @@ MOUNT()
         if [[ -e "$1/$p.img" ]]; then
             mkdir -p "$1/$p"
             printf "$p " >> "$1/mounted.txt"
-            if [ $(uname) == Linux ]; then
-                sudo mount -o ro "$1/$p.img" "$1/$p"
-            elif [ $(uname) == Darwin ]; then
-                fuse-ext2 "$1/$p.img" "$1/$p"
-            fi
+            proot-distro mount "$1/$p.img" "$1/$p"
         fi
     done
 }
@@ -100,7 +94,7 @@ UMOUNT()
 {
     for p in $PARTITIONS; do
         if [[ -e "$1/$p.img" ]]; then
-            sudo umount "$1/$p"
+            proot-distro umount "$1/$p"
         fi
     done
 }
