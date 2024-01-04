@@ -1,17 +1,18 @@
 #!/bin/bash
 
-if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    distro=$(awk -F= '$1 == "ID" {print $2}' /etc/os-release)
-    id_like=$(awk -F= '$1 == "ID_LIKE" {print $2}' /etc/os-release)
-    if [[ "$distro" == "arch" || "$id_like" == "arch" ]]; then
-       echo "Arch Linux Detected"
-       sudo pacman -S --needed unace unrar zip unzip p7zip sharutils uudeview arj cabextract file-roller dtc xz python-pip brotli lz4 gawk libmpack aria2
-       #aur=rar
+if [[ "$(uname)" == "Linux" ]]; then
+    if [[ -n "$(command -v pkg)" ]]; then
+        pkg install -y unace unrar zip unzip p7zip p7zip-plugins sharutils uudeview arj file dtc python brotli lz4 gawk aria2
+        # Adjust installation commands based on what's available in Termux packages
     else
-       sudo apt install unace unrar zip unzip p7zip-full p7zip-rar sharutils rar uudeview mpack arj cabextract file-roller device-tree-compiler liblzma-dev python-pip brotli liblz4-tool gawk aria2
+        echo "Please install 'pkg' package manager in Termux."
+        exit 1
     fi
-    pip install backports.lzma protobuf pycrypto
-elif [[ "$OSTYPE" == "darwin"* ]]; then
-    brew install protobuf xz brotli lz4 aria2
-    pip install backports.lzma protobuf pycrypto
+    pip install backports.lzma protobuf pycryptodome
+elif [[ "$(uname)" == "Darwin" ]]; then
+    echo "This script is not designed for macOS."
+    exit 1
+else
+    echo "Unsupported operating system."
+    exit 1
 fi
