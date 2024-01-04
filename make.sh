@@ -1,5 +1,9 @@
 #!/bin/bash
 
+
+alias umount="busybox umount"
+
+# ... [rest of your script remains unchanged]
 # Project OEM-GSI Porter by Erfan Abdi <erfangplus@gmail.com>
 
 usage()
