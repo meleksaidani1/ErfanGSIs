@@ -1,5 +1,5 @@
 ## Requirements
-    Linux or Mac
+    re code for termux alpha
 
 ## Released GSIs
 Download links: https://mirrors.lolinet.com/firmware/gsi/  
@@ -11,7 +11,7 @@ Telegram channel: https://t.me/ErfanGSI
 
 ### Download tools
 ```
-git clone --recurse-submodules https://github.com/erfanoabdi/ErfanGSIs.git
+git clone https://github.com/meleksaidani1/ErfanGSIs
 cd ErfanGSIs
 ```
 
