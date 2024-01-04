@@ -2,7 +2,7 @@
 
 if [[ "$(uname)" == "Linux" ]]; then
     if [[ -n "$(command -v pkg)" ]]; then
-        pkg update && pkg upgrade pkg install python git coreutils pkg install -y unace unrar zip unzip p7zip p7zip-plugins sharutils uudeview arj file dtc python brotli lz4 gawk aria2 pkg install tsu pkg search p7zip
+        pkg update && pkg upgrade pkg install wget pkg install python git coreutils pkg install -y unace unrar zip unzip p7zip p7zip-plugins sharutils uudeview arj file dtc python brotli lz4 gawk aria2 pkg install tsu pkg search p7zip
 
         # Adjust installation commands based on what's available in Termux packages
     else
