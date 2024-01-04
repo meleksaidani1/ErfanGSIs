@@ -1,5 +1,5 @@
 ## Requirements
-    re code for termux alpha
+    re code for termux (alpha project) 
 
 ## Released GSIs
 Download links: https://mirrors.lolinet.com/firmware/gsi/  
