@@ -1,7 +1,5 @@
 #!/bin/bash
 
-alias umount="busybox umount"
-
 # ... [rest of your script remains unchanged]
 
 echo "Create Temp dir"
