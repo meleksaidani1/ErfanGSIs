@@ -20,19 +20,6 @@ if [ "$sourcetype" == "Aonly" ]; then
 else
     echo "Making copy of source rom to temp"
     ( cd "$systempath" ; tar cf - . ) | ( cd "$systemdir" ; tar xf - )
-    if [[ -e "$sourcepath/mounted.txt" ]]; then
-        for p in $(cat "$sourcepath/mounted.txt"); do
-            [[ $p = system ]] && continue
-            [[ $p = vendor ]] && continue
-            if [[ -L "$systemdir/system/$p" ]]; then
-                rm -rf "$systemdir/system/$p"
-                mkdir "$systemdir/system/$p"
-                rm -rf "$systemdir/$p"
-                ln -s "/system/$p" "$systemdir/$p"
-                ( cd "$sourcepath/$p" ; tar cf - . ) | ( cd "$systemdir/system/$p" ; tar xf - )
-            fi
-        done
-    fi
     cd "$LOCALDIR"
     sed -i "/ro.build.system_root_image/d" "$systemdir/system/build.prop"
     sed -i "/ro.build.ab_update/d" "$systemdir/system/build.prop"
