@@ -5,6 +5,7 @@ alias umount="busybox umount"
 # ... [rest of your script remains unchanged]
 
 echo "Create Temp dir"
+tempdir="/path/to/temp_directory"  # Replace this with your desired temporary directory path
 rm -rf "$tempdir"
 mkdir -p "$systemdir"
 
