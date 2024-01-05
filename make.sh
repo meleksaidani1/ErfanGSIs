@@ -31,26 +31,26 @@ if [ "$sourcetype" == "Aonly" ]; then
     tar xf "$prebuiltdir/ABrootDir.tar"
     cd "$LOCALDIR"
     echo "Making copy of source rom to temp"
-    ( cd "$systempath" ; tsudo tar cf - . ) | ( cd "$systemdir/system" ; tsudo tar xf - )
+    ( cd "$systempath" ; tar cf - . ) | ( cd "$systemdir/system" ; tar xf - )
     cd "$LOCALDIR"
     sed -i "/ro.build.system_root_image/d" "$systemdir/system/build.prop"
     sed -i "/ro.build.ab_update/d" "$systemdir/system/build.prop"
     echo "ro.build.system_root_image=false" >> "$systemdir/system/build.prop"
 else
     echo "Making copy of source rom to temp"
-    ( cd "$systempath" ; tsudo tar cf - . ) | ( cd "$systemdir" ; tsudo tar xf - )
+    ( cd "$systempath" ; tar cf - . ) | ( cd "$systemdir" ; tar xf - )
     if [[ -e "$sourcepath/mounted.txt" ]]; then
-        for p in $(cat "$sourcepath/mounted.txt"); do
+        while IFS= read -r p; do
             [[ $p = system ]] && continue
             [[ $p = vendor ]] && continue
             if [[ -L "$systemdir/system/$p" ]]; then
-                tsudo rm -rf "$systemdir/system/$p"
+                rm -rf "$systemdir/system/$p"
                 mkdir "$systemdir/system/$p"
-                tsudo rm -rf "$systemdir/$p"
+                rm -rf "$systemdir/$p"
                 ln -s "/system/$p" "$systemdir/$p"
-                ( cd "$sourcepath/$p" ; tsudo tar cf - . ) | ( cd "$systemdir/system/$p" ; tsudo tar xf - )
+                ( cd "$sourcepath/$p" ; tar cf - . ) | ( cd "$systemdir/system/$p" ; tar xf - )
             fi
-        done
+        done < "$sourcepath/mounted.txt"
     fi
     cd "$LOCALDIR"
     sed -i "/ro.build.system_root_image/d" "$systemdir/system/build.prop"
