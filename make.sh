@@ -2,12 +2,6 @@
 
 # ... [rest of your script remains unchanged]
 
-usage() {
-    # ... [rest of your usage function remains unchanged]
-}
-
-# ... [rest of your script remains unchanged]
-
 echo "Create Temp dir"
 rm -rf "$tempdir"
 mkdir -p "$systemdir"
@@ -27,7 +21,7 @@ else
     echo "Making copy of source rom to temp"
     ( cd "$systempath" ; tar cf - . ) | ( cd "$systemdir" ; tar xf - )
     if [[ -e "$sourcepath/mounted.txt" ]]; then
-        while read -r p; do
+        for p in $(cat "$sourcepath/mounted.txt"); do
             [[ $p = system ]] && continue
             [[ $p = vendor ]] && continue
             if [[ -L "$systemdir/system/$p" ]]; then
@@ -37,7 +31,7 @@ else
                 ln -s "/system/$p" "$systemdir/$p"
                 ( cd "$sourcepath/$p" ; tar cf - . ) | ( cd "$systemdir/system/$p" ; tar xf - )
             fi
-        done < "$sourcepath/mounted.txt"
+        done
     fi
     cd "$LOCALDIR"
     sed -i "/ro.build.system_root_image/d" "$systemdir/system/build.prop"
