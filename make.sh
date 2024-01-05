@@ -1,5 +1,7 @@
 #!/bin/bash
 
+alias umount="busybox umount"
+
 # ... [rest of your script remains unchanged]
 
 usage() {
@@ -51,5 +53,4 @@ echo "Patching started..."
 # ... [rest of your script remains unchanged]
 
 echo "Remove Temp dir"
-umount "$tempdir"
 rm -rf "$tempdir"
