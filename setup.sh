@@ -2,6 +2,7 @@
 
 if [[ "$(uname)" == "Linux" ]]; then
     if [[ -n "$(command -v pkg)" ]]; then
+pkg update && pkg upgrade pkg install aria2 pkg install wget
 
         # Adjust installation commands based on what's available in Termux packages
     else
