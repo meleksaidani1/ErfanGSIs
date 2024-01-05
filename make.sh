@@ -27,7 +27,7 @@ else
     echo "Making copy of source rom to temp"
     ( cd "$systempath" ; tar cf - . ) | ( cd "$systemdir" ; tar xf - )
     if [[ -e "$sourcepath/mounted.txt" ]]; then
-        for p in $(cat "$sourcepath/mounted.txt"); do
+        while read -r p; do
             [[ $p = system ]] && continue
             [[ $p = vendor ]] && continue
             if [[ -L "$systemdir/system/$p" ]]; then
@@ -37,7 +37,7 @@ else
                 ln -s "/system/$p" "$systemdir/$p"
                 ( cd "$sourcepath/$p" ; tar cf - . ) | ( cd "$systemdir/system/$p" ; tar xf - )
             fi
-        done
+        done < "$sourcepath/mounted.txt"
     fi
     cd "$LOCALDIR"
     sed -i "/ro.build.system_root_image/d" "$systemdir/system/build.prop"
