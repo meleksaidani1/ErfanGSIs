@@ -9,6 +9,9 @@ pkg install 7zip
 pkg install p7zip 
 pkg install python
 pkg install brotli
+pkg install proot-distro
+pkg install tsu
+
 
         # Adjust installation commands based on what's available in Termux packages
     else
