@@ -1,7 +1,5 @@
 #!/bin/bash
 
-alias umount="busybox umount"
-
 # ... [rest of your script remains unchanged]
 # Project OEM-GSI Porter by Erfan Abdi <erfangplus@gmail.com>
 
@@ -31,26 +29,26 @@ if [ "$sourcetype" == "Aonly" ]; then
     tar xf "$prebuiltdir/ABrootDir.tar"
     cd "$LOCALDIR"
     echo "Making copy of source rom to temp"
-    ( cd "$systempath" ; tar cf - . ) | ( cd "$systemdir/system" ; tar xf - )
+    ( cd "$systempath" ; sudo tar cf - . ) | ( cd "$systemdir/system" ; sudo tar xf - )
     cd "$LOCALDIR"
     sed -i "/ro.build.system_root_image/d" "$systemdir/system/build.prop"
     sed -i "/ro.build.ab_update/d" "$systemdir/system/build.prop"
     echo "ro.build.system_root_image=false" >> "$systemdir/system/build.prop"
 else
     echo "Making copy of source rom to temp"
-    ( cd "$systempath" ; tar cf - . ) | ( cd "$systemdir" ; tar xf - )
+    ( cd "$systempath" ; sudo tar cf - . ) | ( cd "$systemdir" ; sudo tar xf - )
     if [[ -e "$sourcepath/mounted.txt" ]]; then
-        while IFS= read -r p; do
+        for p in $(cat "$sourcepath/mounted.txt"); do
             [[ $p = system ]] && continue
             [[ $p = vendor ]] && continue
             if [[ -L "$systemdir/system/$p" ]]; then
-                rm -rf "$systemdir/system/$p"
+                sudo rm -rf "$systemdir/system/$p"
                 mkdir "$systemdir/system/$p"
-                rm -rf "$systemdir/$p"
+                sudo rm -rf "$systemdir/$p"
                 ln -s "/system/$p" "$systemdir/$p"
-                ( cd "$sourcepath/$p" ; tar cf - . ) | ( cd "$systemdir/system/$p" ; tar xf - )
+                ( cd "$sourcepath/$p" ; sudo tar cf - . ) | ( cd "$systemdir/system/$p" ; sudo tar xf - )
             fi
-        done < "$sourcepath/mounted.txt"
+        done
     fi
     cd "$LOCALDIR"
     sed -i "/ro.build.system_root_image/d" "$systemdir/system/build.prop"
@@ -64,4 +62,5 @@ echo "Patching started..."
 # ... [rest of your script remains unchanged]
 
 echo "Remove Temp dir"
+sudo umount "$tempdir"
 rm -rf "$tempdir"
